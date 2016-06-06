@@ -13,6 +13,7 @@ import ui.main.MainController;
 import ui.settings.WekaAppSettings;
 
 import java.io.IOException;
+import java.net.URL;
 
 public class Main extends Application {
 
@@ -65,7 +66,13 @@ public class Main extends Application {
             svmClassificator.loadModel(svmPath);
         }
         else {
-            svmClassificator.loadModel(SVM_MODEL_PATH);
+            
+            
+            URL test = Main.class.getResource("/weka-models/filtered-smo-25-5.model");
+            String path = test.getPath();
+            
+            svmClassificator.loadModel(path);
+//            svmClassificator.loadModel(SVM_MODEL_PATH);
         }
     }
 

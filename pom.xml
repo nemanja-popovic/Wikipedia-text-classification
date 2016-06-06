@@ -12,6 +12,9 @@
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <mainClass>wekatextclassification.Main</mainClass>
+        <application.title>${project.artifactId}</application.title>
+        <dist.dir>${project.build.directory}/diploy</dist.dir>
+        <base.dir>${project.basedir}</base.dir>
     </properties>
     
     <dependencies>
@@ -122,16 +125,22 @@
                 <artifactId>javafx-maven-plugin</artifactId>
                 <version>8.1.5</version>
                 <configuration>
-                        <mainClass></mainClass>
+                        <mainClass>wekatextclassification.Main</mainClass>
                         <identifier></identifier>
                         
-                        <!--<verbose>true</verbose>-->
+                        <verbose>true</verbose>
                 </configuration>
                 <executions>
                         <execution>
                                 <!-- required before build-native -->
                                 <id>create-jfxjar</id>
                                 <phase>package</phase>
+                                <configuration>
+                                    <icon>${project.build.finalName}.ico</icon>
+                                    <additionalClasspathElements>
+                                        <additionalClasspathElement>${basedir}</additionalClasspathElement>
+                                    </additionalClasspathElements>
+                                </configuration>
                                 <goals>
                                         <goal>build-jar</goal>
                                 </goals>

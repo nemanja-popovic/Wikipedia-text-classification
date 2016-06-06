@@ -73,18 +73,6 @@ public class Classificator {
         for (int i = 0; i < classes.size(); i++) {
             fvNominalVal.addElement(classes.get(i));
         }
-        
-//        FastVector fvNominalVal = new FastVector(10);
-//        fvNominalVal.addElement("architecture");
-//        fvNominalVal.addElement("art");
-//        fvNominalVal.addElement("biology");
-//        fvNominalVal.addElement("chemistry");
-//        fvNominalVal.addElement("computer science");
-//        fvNominalVal.addElement("literature");
-//        fvNominalVal.addElement("mathematics");
-//        fvNominalVal.addElement("music");
-//        fvNominalVal.addElement("philosophy");
-//        fvNominalVal.addElement("physics");
 
         Attribute attribute1 = new Attribute("text",(FastVector) null);
         Attribute attribute2 = new Attribute("class", fvNominalVal);
