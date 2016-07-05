@@ -120,7 +120,7 @@
                     </additionalClasspathElements>
                 </configuration>
             </plugin>
-            <plugin>
+<!--            <plugin>
                 <groupId>com.zenjava</groupId>
                 <artifactId>javafx-maven-plugin</artifactId>
                 <version>8.1.5</version>
@@ -132,7 +132,7 @@
                 </configuration>
                 <executions>
                         <execution>
-                                <!-- required before build-native -->
+                                 required before build-native 
                                 <id>create-jfxjar</id>
                                 <phase>package</phase>
                                 <configuration>
@@ -140,6 +140,8 @@
                                     <additionalClasspathElements>
                                         <additionalClasspathElement>${basedir}</additionalClasspathElement>
                                     </additionalClasspathElements>
+                                     <additionalAppResources>src/main/resources/weka-models</additionalAppResources>
+                                     <additionalAppResources>src/main/resources/images</additionalAppResources>
                                 </configuration>
                                 <goals>
                                         <goal>build-jar</goal>
@@ -153,6 +155,15 @@
                                 </goals>
                         </execution>
                 </executions>
+            </plugin>-->
+            <plugin>
+                    <groupId>com.zenjava</groupId>
+                    <artifactId>javafx-maven-plugin</artifactId>
+                    <version>8.1.4</version>
+                    <configuration>
+                            <mainClass>wekatextclassification.Main</mainClass>
+                            <additionalAppResources>resources</additionalAppResources>
+                    </configuration>
             </plugin>
         </plugins>
     </build>

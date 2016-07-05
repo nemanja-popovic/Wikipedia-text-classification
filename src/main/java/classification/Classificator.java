@@ -47,7 +47,7 @@ public class Classificator {
         classes.add("physics");
     }
     
-    public List<String> GetClasses(){
+    public List<String> getClasses(){
         return classes;
     }
 

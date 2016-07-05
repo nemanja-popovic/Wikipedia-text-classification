@@ -22,9 +22,9 @@ public class Main extends Application {
 
     private Classificator naiveBayesClassificator;
     private Classificator svmClassificator;
-    private final String NAIVE_BAYES_MODEL_PATH = "src/main/resources/weka-models/filtered-bayes-25-5.model";
-    private final String SVM_MODEL_PATH = "src/main/resources/weka-models/filtered-smo-25-5.model";
-    private final String ICON_IMAGE_PATH = "file:src/main/resources/images/icon.png";
+    private final String NAIVE_BAYES_MODEL_PATH = "resources/weka-models/filtered-bayes-25-5.model";
+    private final String SVM_MODEL_PATH = "resources/weka-models/filtered-smo-25-5.model";
+    private final String ICON_IMAGE_PATH = "file:resources/images/icon.png";
 
     @Override
     public void start(Stage primaryStage) {
@@ -66,13 +66,7 @@ public class Main extends Application {
             svmClassificator.loadModel(svmPath);
         }
         else {
-            
-            
-            URL test = Main.class.getResource("/weka-models/filtered-smo-25-5.model");
-            String path = test.getPath();
-            
-            svmClassificator.loadModel(path);
-//            svmClassificator.loadModel(SVM_MODEL_PATH);
+            svmClassificator.loadModel(SVM_MODEL_PATH);
         }
     }
 
@@ -120,7 +114,7 @@ public class Main extends Application {
         } catch (IOException e) {
         }
     }
-
+    
     /**
      * Returns the main stage.
      * @return
@@ -132,4 +126,5 @@ public class Main extends Application {
     public static void main(String[] args) {
         launch(args);
     }
+    
 }
