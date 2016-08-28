@@ -26,7 +26,7 @@ public class Classificator {
     /**
      * Object that stores the classifier.
      */
-    //FilteredClassifier classifier;
+    FilteredClassifier classifier;
 
     private Boolean initialized = false;
     
