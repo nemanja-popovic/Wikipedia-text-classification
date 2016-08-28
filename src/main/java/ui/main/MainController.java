@@ -11,10 +11,8 @@ public class MainController extends SplitPane {
 
     //region Variables
     
-    private WebScraping webScraping;
     private Classificator naiveBayesClassificator;
-    private Classificator svmClassificator;
-
+    
     // Reference to the main application.
     private Main mainApp;
 
@@ -24,21 +22,13 @@ public class MainController extends SplitPane {
     //region JavaFX controls
     
     @FXML
-    private Button btnClassify;
-    @FXML
-    private RadioButton naiveBayesBtn;
-    @FXML
-    private RadioButton svmBtn;
-    @FXML
-    private Label lblResult;
-    @FXML
-    private Label lblResultTime;
-    @FXML
     private TextArea textTextArea;
     @FXML
-    private TextField urlTextBox;
+    private TextField searchTextBox;
     @FXML
-    private Button btnDownloadText;
+    private Button btnSearch;
+    @FXML
+    private Label lblResult;
 
     //endregion
     
@@ -46,7 +36,6 @@ public class MainController extends SplitPane {
     //region Constructors
     
     public MainController() {
-        webScraping = new WebScraping();
     }
 
     //endregion
@@ -69,76 +58,27 @@ public class MainController extends SplitPane {
      * @param naiveBayesClassificator1
      * @param svmClassificator1
      */
-    public void setModels(Classificator naiveBayesClassificator1, Classificator svmClassificator1) {
+    public void setModels(Classificator naiveBayesClassificator1) {
         naiveBayesClassificator = naiveBayesClassificator1;
-        svmClassificator = svmClassificator1;
-
-        checkIfClassifyIsEnabled();
-    }
-
-    /**
-     * Used for checking if classificators are initialized.
-     */
-    private void checkIfClassifyIsEnabled() {
-        if (naiveBayesBtn.isSelected()) {
-            if (naiveBayesClassificator != null && naiveBayesClassificator.isInitialized()) {
-                btnClassify.setDisable(false);
-            } else {
-                btnClassify.setDisable(true);
-            }
-        } else if (svmClassificator != null && svmClassificator.isInitialized()) {
-            btnClassify.setDisable(false);
-        } else {
-            btnClassify.setDisable(true);
-        }
     }
 
     /**
      * Used to remove result of classification.
      */
     private void resetResult() {
-        //Restart result value when different algoritam selected
         lblResult.setText("");
-        lblResultTime.setText("");
     }
-
-    //endregion
     
-    //region UI handler methods
-    @FXML
-    protected void naiveBayesRadioButtonSelected() {
-        checkIfClassifyIsEnabled();
-        resetResult();
-    }
-
-    @FXML
-    protected void svmRadioButtonSelected() {
-        checkIfClassifyIsEnabled();
-        resetResult();
-    }
-
-    @FXML
-    protected void getTextFromUrl() {
-        String text = webScraping.getContent(urlTextBox.getText());
-        textTextArea.setText(text);
-        resetResult();
-    }
-
-    @FXML
-    protected void classify() {
+    
+    private void classify(String text) {
         try {
             String result;
 
             long startTime = System.currentTimeMillis();
 
-            if (naiveBayesBtn.isSelected()) {
-                System.out.println("Bayes");
-                result = naiveBayesClassificator.classify(textTextArea.getText());
-            } else {
-                System.out.println("SVM");
-                result = svmClassificator.classify(textTextArea.getText());
-            }
-
+            System.out.println("Bayes");
+            result = naiveBayesClassificator.classify(text);
+    
             long endTime = System.currentTimeMillis();
             long totalTime = endTime - startTime;
             
@@ -146,11 +86,13 @@ public class MainController extends SplitPane {
             
             long seconds = TimeUnit.MILLISECONDS.toSeconds(totalTime);
             long mseconds = totalTime - TimeUnit.SECONDS.toMillis(seconds);
-            String time = "Time: " + String.format("%02d:%03d ms", seconds, mseconds);
+            String time = "Time: " + String.format("%02d.%03d s", seconds, mseconds);
             System.out.println(time);
 
+            System.out.println(result);
+            
             lblResult.setText(result);
-            lblResultTime.setText(time);
+            
         } catch (Exception ex) {
             // Show the error message.
             Alert alert = new Alert(Alert.AlertType.ERROR);
@@ -162,6 +104,18 @@ public class MainController extends SplitPane {
 
             alert.showAndWait();
         }
+    }
+
+
+    //endregion
+    
+    //region UI handler methods
+    
+    @FXML
+    protected void search() {
+        String searchText = searchTextBox.getText();
+        classify(searchText);
+        System.out.println(searchText);
     }
 
     //endregion

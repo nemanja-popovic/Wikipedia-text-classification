@@ -39,8 +39,6 @@ public class RootLayoutController extends SplitPane {
     private MenuItem menuSettingsButton;
     @FXML
     private MenuItem menuLoadNaiveBayesModel;
-    @FXML
-    private MenuItem menuLoadSVMModel;
 
     //endregion
 
@@ -60,9 +58,8 @@ public class RootLayoutController extends SplitPane {
      * @param naiveBayesClassificator1
      * @param svmClassificator1
      */
-    public void setModels(Classificator naiveBayesClassificator1, Classificator svmClassificator1) {
+    public void setModels(Classificator naiveBayesClassificator1) {
         naiveBayesClassificator = naiveBayesClassificator1;
-        svmClassificator = svmClassificator1;
     }
 
     /**
@@ -142,37 +139,6 @@ public class RootLayoutController extends SplitPane {
             }
         }
         catch (Exception ex){
-            System.out.println(ex.getMessage());
-        }
-    }
-
-    /**
-     * Loads SVM model from file.
-     */
-    @FXML
-    protected void handleLoadSVMModel() {
-        try {
-            FileChooser fileChooser = new FileChooser();
-
-            // Set extension filter
-            FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter(
-                    "WEKA Model (*.model)", "*.model");
-            fileChooser.getExtensionFilters().add(extFilter);
-
-            String folder = WekaAppSettings.getLastOpenedFolder();
-            if (folder != null && !folder.equals("")) {
-                fileChooser.setInitialDirectory(new File(folder));
-            }
-
-            // Show save file dialog
-            File file = fileChooser.showOpenDialog(mainApp.getPrimaryStage());
-
-            if (file != null) {
-                WekaAppSettings.setLastOpenedFolder(file.getParent());
-//                WekaAppSettings.setSvmModelPath(file.getPath());
-                svmClassificator.loadModel(file.getPath());
-            }
-        } catch (Exception ex) {
             System.out.println(ex.getMessage());
         }
     }

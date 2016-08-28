@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by Nemanja Popovic on 5/26/2016.
+ * Classificator class used for classifying text documents using Weka API.
  */
 public class Classificator {
 
@@ -26,7 +26,7 @@ public class Classificator {
     /**
      * Object that stores the classifier.
      */
-    FilteredClassifier classifier;
+    //FilteredClassifier classifier;
 
     private Boolean initialized = false;
     
@@ -34,7 +34,7 @@ public class Classificator {
 
     public Classificator() {
         classes = new ArrayList<String>();
-        
+
         classes.add("architecture");
         classes.add("art");
         classes.add("biology");
@@ -46,7 +46,7 @@ public class Classificator {
         classes.add("philosophy");
         classes.add("physics");
     }
-    
+
     public List<String> getClasses(){
         return classes;
     }
@@ -63,35 +63,34 @@ public class Classificator {
         text = newText;
     }
 
-    /**
-     * This method creates the instance to be classified, from the text that has been read.
-     */
-    private void makeInstance() {
-        // Create the attributes, class and text
-        
-        FastVector fvNominalVal = new FastVector(classes.size());
-        for (int i = 0; i < classes.size(); i++) {
-            fvNominalVal.addElement(classes.get(i));
-        }
+/**
+ * This method creates the instance to be classified, from the text that has been read.
+ */
+private void makeInstance() {
+    // Create the attributes, class and text
 
-        Attribute attribute1 = new Attribute("text",(FastVector) null);
-        Attribute attribute2 = new Attribute("class", fvNominalVal);
-        // Create list of instances with one element
-        FastVector fvWekaAttributes = new FastVector(2);
-        fvWekaAttributes.addElement(attribute1);
-        fvWekaAttributes.addElement(attribute2);
-        instances = new Instances("Test relation", fvWekaAttributes, 1);
-        // Set class index
-        instances.setClassIndex(1);
-        // Create and add the instance
-        Instance instance = new Instance(2);
-        instance.setValue(attribute1, text);
-        // Another way to do it:
-        // instance.setValue((Attribute)fvWekaAttributes.elementAt(1), text);
-        instances.add(instance);
-        System.out.println("===== Instance created with reference dataset =====");
-        System.out.println(instances);
+    FastVector fvNominalVal = new FastVector(classes.size());
+    for (int i = 0; i < classes.size(); i++) {
+        fvNominalVal.addElement(classes.get(i));
     }
+
+    Attribute attribute1 = new Attribute("text",(FastVector) null);
+    Attribute attribute2 = new Attribute("class", fvNominalVal);
+    // Create list of instances with one element
+    FastVector fvWekaAttributes = new FastVector(2);
+    fvWekaAttributes.addElement(attribute1);
+    fvWekaAttributes.addElement(attribute2);
+    instances = new Instances("Test relation", fvWekaAttributes, 1);
+    // Set class index
+    instances.setClassIndex(1);
+    // Create and add the instance
+    Instance instance = new Instance(2);
+    instance.setValue(attribute1, text);
+
+    instances.add(instance);
+    System.out.println("===== Instance created with reference dataset =====");
+    System.out.println(instances);
+}
 
     /**
      * This method loads the model to be used as classifier.
@@ -115,25 +114,25 @@ public class Classificator {
         }
     }
 
-    /**
-     * This method performs the classification of the instance.
-     * Output is done at the command-line.
-     * @param text Text that should be classified.
-     * @return Classification output.
-     */
-    public String classify(String text) {
-        try {
-            setText(text);
-            makeInstance();
+/**
+ * This method performs the classification of the instance.
+ * Output is done at the command-line.
+ * @param text Text that should be classified.
+ * @return Classification output.
+ */
+public String classify(String text) {
+    try {
+        setText(text);
+        makeInstance();
 
-            double pred = classifier.classifyInstance(instances.instance(0));
-            System.out.println("===== Classified instance =====");
-            System.out.println("Class predicted: " + instances.classAttribute().value((int) pred));
-            return instances.classAttribute().value((int) pred);
-        }
-        catch (Exception e) {
-            System.out.println("Problem found when classifying the text");
-            return "";
-        }
+        double pred = classifier.classifyInstance(instances.instance(0));
+        System.out.println("===== Classified instance =====");
+        System.out.println("Class predicted: " + instances.classAttribute().value((int) pred));
+        return instances.classAttribute().value((int) pred);
     }
+    catch (Exception e) {
+        System.out.println("Problem found when classifying the text");
+        return "";
+    }
+}
 }

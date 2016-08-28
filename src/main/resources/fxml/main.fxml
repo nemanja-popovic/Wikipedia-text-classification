@@ -13,97 +13,37 @@
 
 <AnchorPane xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ui.main.MainController">
          <children>
-            <SplitPane dividerPositions="0.7400530503978779" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="500.0" prefWidth="756.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" VBox.vgrow="ALWAYS">
-              <items>
-                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
+            <VBox prefHeight="453.0" prefWidth="500.0">
+               <children>
+                  <HBox>
                      <children>
-                        <VBox layoutX="57.0" layoutY="25.0" prefHeight="453.0" prefWidth="500.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                           <children>
-                              <HBox>
-                                 <children>
-                                    <Label prefHeight="17.0" prefWidth="85.0" text="Url to wiki page">
-                                       <HBox.margin>
-                                          <Insets bottom="5.0" left="5.0" top="7.0" />
-                                       </HBox.margin>
-                                    </Label>
-                                    <TextField fx:id="urlTextBox" prefHeight="25.0" prefWidth="180.0" text="https://en.wikipedia.org/wiki/Prime_number" HBox.hgrow="ALWAYS">
-                                       <HBox.margin>
-                                          <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-                                       </HBox.margin>
-                                    </TextField>
-                                    <Button fx:id="btnDownloadText" mnemonicParsing="false" onAction="#getTextFromUrl" prefHeight="25.0" prefWidth="108.0" text="Download text">
-                                       <HBox.margin>
-                                          <Insets bottom="5.0" right="5.0" top="5.0" />
-                                       </HBox.margin>
-                                    </Button>
-                                 </children>
-                                 <VBox.margin>
-                                    <Insets />
-                                 </VBox.margin>
-                              </HBox>
-                        <Label text="Text to classify">
-                           <VBox.margin>
-                              <Insets bottom="5.0" left="7.0" top="5.0" />
-                           </VBox.margin>
+                        <Label prefHeight="17.0" prefWidth="85.0" text="Query:">
+                           <HBox.margin>
+                              <Insets bottom="5.0" left="5.0" top="7.0" />
+                           </HBox.margin>
                         </Label>
-                              <TextArea fx:id="textTextArea" prefHeight="200.0" prefWidth="200.0" wrapText="true" VBox.vgrow="ALWAYS" />
-                           </children>
-                        </VBox>
-                     </children>
-                  </AnchorPane>
-                <AnchorPane maxWidth="150.0" minHeight="50.0" minWidth="150.0" prefHeight="160.0" prefWidth="150.0">
-                     <children>
-                        <VBox layoutX="55.0" layoutY="70.0" minWidth="200.0" prefHeight="453.0" prefWidth="248.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                           <children>
-                              <Label text="Mode:">
-                                 <VBox.margin>
-                                    <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-                                 </VBox.margin>
-                              </Label>
-                              <RadioButton fx:id="naiveBayesBtn" mnemonicParsing="false" onAction="#naiveBayesRadioButtonSelected" selected="true" text="Naive Bayes">
-                                 <toggleGroup>
-                                    <ToggleGroup fx:id="mode" />
-                                 </toggleGroup>
-                                 <VBox.margin>
-                                    <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-                                 </VBox.margin>
-                              </RadioButton>
-                              <RadioButton fx:id="svmBtn" mnemonicParsing="false" onAction="#svmRadioButtonSelected" text="SVM" toggleGroup="$mode">
-                                 <VBox.margin>
-                                    <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-                                 </VBox.margin>
-                              </RadioButton>
-                              <Button fx:id="btnClassify" disable="true" mnemonicParsing="false" onAction="#classify" text="Classify">
-                                 <VBox.margin>
-                                    <Insets bottom="5.0" left="5.0" right="5.0" top="20.0" />
-                                 </VBox.margin>
-                              </Button>
-                              <Label text="Result:">
-                                 <VBox.margin>
-                                    <Insets bottom="5.0" left="5.0" right="5.0" top="20.0" />
-                                 </VBox.margin>
-                              </Label>
-                              <Label fx:id="lblResult" alignment="CENTER" contentDisplay="CENTER" textAlignment="CENTER">
-                                 <VBox.margin>
-                                    <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-                                 </VBox.margin>
-                                 <font>
-                                    <Font size="16.0" />
-                                 </font>
-                              </Label>
-                        <Label fx:id="lblResultTime">
-                           <opaqueInsets>
-                              <Insets />
-                           </opaqueInsets>
-                           <VBox.margin>
+                        <TextField fx:id="searchTextBox" prefHeight="31.0" prefWidth="325.0" HBox.hgrow="ALWAYS">
+                           <HBox.margin>
                               <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-                           </VBox.margin>
-                        </Label>
-                           </children>
-                        </VBox>
+                           </HBox.margin>
+                        </TextField>
+                        <Button fx:id="btnSearch" mnemonicParsing="false" onAction="#search" prefHeight="25.0" prefWidth="108.0" text="Search">
+                           <HBox.margin>
+                              <Insets bottom="5.0" right="5.0" top="5.0" />
+                           </HBox.margin>
+                        </Button>
                      </children>
-                  </AnchorPane>
-              </items>
-            </SplitPane>
+                     <VBox.margin>
+                        <Insets />
+                     </VBox.margin>
+                  </HBox>
+            <Label text="Results">
+               <VBox.margin>
+                  <Insets bottom="5.0" left="7.0" top="5.0" />
+               </VBox.margin>
+            </Label>
+            <Label fx:id="lblResult" text="Results" />
+               </children>
+            </VBox>
          </children>
       </AnchorPane>

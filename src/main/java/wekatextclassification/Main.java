@@ -21,9 +21,7 @@ public class Main extends Application {
     private BorderPane rootLayout;
 
     private Classificator naiveBayesClassificator;
-    private Classificator svmClassificator;
-    private final String NAIVE_BAYES_MODEL_PATH = "resources/weka-models/filtered-bayes-25-5.model";
-    private final String SVM_MODEL_PATH = "resources/weka-models/filtered-smo-25-5.model";
+    private final String NAIVE_BAYES_MODEL_PATH = "resources/weka-models/filtered-naive-bayes-multi.model";
     private final String ICON_IMAGE_PATH = "file:resources/images/icon.png";
 
     @Override
@@ -57,17 +55,6 @@ public class Main extends Application {
         else {
             naiveBayesClassificator.loadModel(NAIVE_BAYES_MODEL_PATH);
         }
-
-        //Initialize new instance
-        svmClassificator = new Classificator();
-        //Check if there is prefered file to be loaded
-        String svmPath = WekaAppSettings.getSvmModelPath();
-        if(svmPath != null && !svmPath.equals("")){
-            svmClassificator.loadModel(svmPath);
-        }
-        else {
-            svmClassificator.loadModel(SVM_MODEL_PATH);
-        }
     }
 
     /**
@@ -84,7 +71,7 @@ public class Main extends Application {
             RootLayoutController controller = loader.getController();
             controller.setMainApp(this);
 
-            controller.setModels(naiveBayesClassificator, svmClassificator);
+            controller.setModels(naiveBayesClassificator);
 
             // Show the scene containing the root layout.
             Scene scene = new Scene(rootLayout);
@@ -107,7 +94,7 @@ public class Main extends Application {
             // Give the controller access to the main app.
             MainController controller = loader.getController();
             controller.setMainApp(this);
-            controller.setModels(naiveBayesClassificator, svmClassificator);
+            controller.setModels(naiveBayesClassificator);
 
             // Set main page into the center of root layout.
             rootLayout.setCenter(mainPage);
