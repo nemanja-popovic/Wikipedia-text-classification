@@ -128,6 +128,15 @@ public String classify(String text) {
         double pred = classifier.classifyInstance(instances.instance(0));
         System.out.println("===== Classified instance =====");
         System.out.println("Class predicted: " + instances.classAttribute().value((int) pred));
+        
+        //get the prediction percentage or distribution
+        double[] percentage = classifier.distributionForInstance(instances.instance(0));
+        System.out.println("===== How sure we are? =====");
+        System.out.println(percentage.toString());
+        for (int i = 0; i < percentage.length; i++) {
+            System.out.println(percentage[i] + ",");    
+        }
+        
         return instances.classAttribute().value((int) pred);
     }
     catch (Exception e) {
