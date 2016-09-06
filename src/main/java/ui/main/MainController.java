@@ -4,23 +4,22 @@ import classification.Classificator;
 import java.util.concurrent.TimeUnit;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import search.TextSearch;
 import wekatextclassification.Main;
 import utils.WebScraping;
 
 public class MainController extends SplitPane {
 
     //region Variables
-    
     private Classificator naiveBayesClassificator;
-    
+
     // Reference to the main application.
     private Main mainApp;
+    
+    private TextSearch textSearch;
 
     //endregion
-    
-    
     //region JavaFX controls
-    
     @FXML
     private TextArea textTextArea;
     @FXML
@@ -31,18 +30,13 @@ public class MainController extends SplitPane {
     private Label lblResult;
 
     //endregion
-    
-    
     //region Constructors
-    
     public MainController() {
+        textSearch = new TextSearch();
     }
 
     //endregion
-    
-    
     //region Methods
-    
     /**
      * Is called by the main application to give a reference back to itself.
      *
@@ -69,16 +63,14 @@ public class MainController extends SplitPane {
         lblResult.setText("");
     }
     
-    
-    private void classify(String text) {
+    private String classify(String text) {
+        String result = "";
         try {
-            String result;
-
             long startTime = System.currentTimeMillis();
-
+            
             System.out.println("Bayes");
             result = naiveBayesClassificator.classify(text);
-    
+            
             long endTime = System.currentTimeMillis();
             long totalTime = endTime - startTime;
             
@@ -88,11 +80,12 @@ public class MainController extends SplitPane {
             long mseconds = totalTime - TimeUnit.SECONDS.toMillis(seconds);
             String time = "Time: " + String.format("%02d.%03d s", seconds, mseconds);
             System.out.println(time);
-
+            
             System.out.println(result);
             
             lblResult.setText(result);
-            
+
+            //Now do search with Lucene and show results
         } catch (Exception ex) {
             // Show the error message.
             Alert alert = new Alert(Alert.AlertType.ERROR);
@@ -101,20 +94,22 @@ public class MainController extends SplitPane {
             alert.setHeaderText("Please make sure that models are properly loaded.");
             alert.setContentText("You can load weka models using File -> Load Naive Bayes model or File -> Load SVM model\n"
                     + "Then make sure that correct algorithm is used for classification.");
-
+            
             alert.showAndWait();
+        } finally {
+            return result;
         }
     }
 
-
     //endregion
-    
     //region UI handler methods
-    
     @FXML
     protected void search() {
         String searchText = searchTextBox.getText();
-        classify(searchText);
+        String classified = classify(searchText);
+        
+        textSearch.Search(classified, searchText);
+        
         System.out.println(searchText);
     }
 

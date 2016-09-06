@@ -16,10 +16,6 @@ import java.util.List;
 public class Classificator {
 
     /**
-     * String that stores the text to classify
-     */
-    String text;
-    /**
      * Object that stores the instance.
      */
     Instances instances;
@@ -29,7 +25,7 @@ public class Classificator {
     FilteredClassifier classifier;
 
     private Boolean initialized = false;
-    
+
     private List<String> classes;
 
     public Classificator() {
@@ -47,53 +43,45 @@ public class Classificator {
         classes.add("physics");
     }
 
-    public List<String> getClasses(){
+    public List<String> getClasses() {
         return classes;
     }
 
-    public Boolean isInitialized(){
+    public Boolean isInitialized() {
         return initialized;
     }
 
     /**
-     * This method sets text that should be classified.
-     * @param newText The text that should be classified.
+     * This method creates the instance to be classified, from the text that has
+     * been read.
      */
-    private void setText(String newText){
-        text = newText;
+    private void makeInstance(String text) {
+        // Create the attributes, class and text
+
+        FastVector fvNominalVal = new FastVector(classes.size());
+        for (int i = 0; i < classes.size(); i++) {
+            fvNominalVal.addElement(classes.get(i));
+        }
+
+        Attribute attribute1 = new Attribute("text", (FastVector) null);
+        Attribute attribute2 = new Attribute("class", fvNominalVal);
+        // Create list of instances with one element
+        FastVector fvWekaAttributes = new FastVector(2);
+        fvWekaAttributes.addElement(attribute1);
+        fvWekaAttributes.addElement(attribute2);
+        instances = new Instances("Test relation", fvWekaAttributes, 1);
+        // Set class index
+        instances.setClassIndex(1);
+        // Create and add the instance
+        Instance instance = new Instance(2);
+        instance.setValue(attribute1, text);
+
+        instances.add(instance);
     }
-
-/**
- * This method creates the instance to be classified, from the text that has been read.
- */
-private void makeInstance() {
-    // Create the attributes, class and text
-
-    FastVector fvNominalVal = new FastVector(classes.size());
-    for (int i = 0; i < classes.size(); i++) {
-        fvNominalVal.addElement(classes.get(i));
-    }
-
-    Attribute attribute1 = new Attribute("text",(FastVector) null);
-    Attribute attribute2 = new Attribute("class", fvNominalVal);
-    // Create list of instances with one element
-    FastVector fvWekaAttributes = new FastVector(2);
-    fvWekaAttributes.addElement(attribute1);
-    fvWekaAttributes.addElement(attribute2);
-    instances = new Instances("Test relation", fvWekaAttributes, 1);
-    // Set class index
-    instances.setClassIndex(1);
-    // Create and add the instance
-    Instance instance = new Instance(2);
-    instance.setValue(attribute1, text);
-
-    instances.add(instance);
-    System.out.println("===== Instance created with reference dataset =====");
-    System.out.println(instances);
-}
 
     /**
      * This method loads the model to be used as classifier.
+     *
      * @param fileName The name of the file that stores the text.
      */
     public void loadModel(String fileName) {
@@ -105,8 +93,7 @@ private void makeInstance() {
             System.out.println("===== Loaded model: " + fileName + " =====");
 
             initialized = true;
-        }
-        catch (IOException | ClassNotFoundException e) {
+        } catch (IOException | ClassNotFoundException e) {
             // Given the cast, a ClassNotFoundException must be caught along with the IOException
             System.out.println("Problem found when reading: " + fileName);
 
@@ -114,34 +101,32 @@ private void makeInstance() {
         }
     }
 
-/**
- * This method performs the classification of the instance.
- * Output is done at the command-line.
- * @param text Text that should be classified.
- * @return Classification output.
- */
-public String classify(String text) {
-    try {
-        setText(text);
-        makeInstance();
+    /**
+     * This method performs the classification of the instance. Output is done
+     * at the command-line.
+     *
+     * @param text Text that should be classified.
+     * @return Classification output.
+     */
+    public String classify(String text) {
+        try {
+            makeInstance(text);
+            
+            double pred = classifier.classifyInstance(instances.instance(0));
+            //get the prediction percentage or distribution
+            double[] percentage = classifier.distributionForInstance(instances.instance(0));
 
-        double pred = classifier.classifyInstance(instances.instance(0));
-        System.out.println("===== Classified instance =====");
-        System.out.println("Class predicted: " + instances.classAttribute().value((int) pred));
-        
-        //get the prediction percentage or distribution
-        double[] percentage = classifier.distributionForInstance(instances.instance(0));
-        System.out.println("===== How sure we are? =====");
-        System.out.println(percentage.toString());
-        for (int i = 0; i < percentage.length; i++) {
-            System.out.println(percentage[i] + ",");    
+            //If prediction is > 0.2 then return predicted class
+            if (percentage[(int) pred] > 0.2) {
+                return instances.classAttribute().value((int) pred);
+            } else {
+                //We are not sure which class this query should be classified to
+                //Because that search will be executed over all documents
+                return "";
+            }
+        } catch (Exception e) {
+            System.out.println("Problem found when classifying the text");
+            return "";
         }
-        
-        return instances.classAttribute().value((int) pred);
     }
-    catch (Exception e) {
-        System.out.println("Problem found when classifying the text");
-        return "";
-    }
-}
 }
