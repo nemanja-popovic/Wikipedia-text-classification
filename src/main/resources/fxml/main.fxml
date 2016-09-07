@@ -13,9 +13,9 @@
 
 <AnchorPane xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ui.main.MainController">
          <children>
-            <VBox prefHeight="453.0" prefWidth="500.0">
+            <VBox AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                <children>
-                  <HBox>
+                  <HBox alignment="TOP_CENTER">
                      <children>
                         <Label prefHeight="17.0" prefWidth="85.0" text="Query:">
                            <HBox.margin>
@@ -37,12 +37,25 @@
                         <Insets />
                      </VBox.margin>
                   </HBox>
-            <Label text="Results">
+            <Label fx:id="lblClass" text="Class">
                <VBox.margin>
                   <Insets bottom="5.0" left="7.0" top="5.0" />
                </VBox.margin>
             </Label>
-            <Label fx:id="lblResult" text="Results" />
+            <Label fx:id="lblTime" text="Time:">
+               <padding>
+                  <Insets bottom="5.0" left="7.0" top="5.0" />
+               </padding>
+            </Label>
+            <Label fx:id="lblResult" text="Results">
+               <VBox.margin>
+                  <Insets bottom="5.0" left="7.0" top="5.0" />
+               </VBox.margin></Label>
+            <ListView fx:id="lstResults" prefWidth="200.0" VBox.vgrow="ALWAYS">
+               <VBox.margin>
+                  <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+               </VBox.margin>
+            </ListView>
                </children>
             </VBox>
          </children>

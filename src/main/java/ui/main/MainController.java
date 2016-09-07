@@ -2,8 +2,12 @@ package ui.main;
 
 import classification.Classificator;
 import java.util.concurrent.TimeUnit;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import search.SearchResult;
+import search.SearchResults;
 import search.TextSearch;
 import wekatextclassification.Main;
 import utils.WebScraping;
@@ -15,8 +19,10 @@ public class MainController extends SplitPane {
 
     // Reference to the main application.
     private Main mainApp;
-    
+
     private TextSearch textSearch;
+
+    ObservableList<String> resultsListData;
 
     //endregion
     //region JavaFX controls
@@ -27,11 +33,18 @@ public class MainController extends SplitPane {
     @FXML
     private Button btnSearch;
     @FXML
+    private Label lblClass;
+    @FXML
     private Label lblResult;
+    @FXML
+    private Label lblTime;
+    @FXML
+    private ListView lstResults;
 
     //endregion
     //region Constructors
     public MainController() {
+        resultsListData = FXCollections.observableArrayList();
         textSearch = new TextSearch();
     }
 
@@ -60,30 +73,22 @@ public class MainController extends SplitPane {
      * Used to remove result of classification.
      */
     private void resetResult() {
-        lblResult.setText("");
+        lblClass.setText("Class: ");
+        lblResult.setText("Results: ");
+        lblTime.setText("Time: ");
+        resultsListData.clear();
     }
-    
+
     private String classify(String text) {
         String result = "";
         try {
-            long startTime = System.currentTimeMillis();
-            
+
             System.out.println("Bayes");
             result = naiveBayesClassificator.classify(text);
-            
-            long endTime = System.currentTimeMillis();
-            long totalTime = endTime - startTime;
-            
-            System.out.println(totalTime);
-            
-            long seconds = TimeUnit.MILLISECONDS.toSeconds(totalTime);
-            long mseconds = totalTime - TimeUnit.SECONDS.toMillis(seconds);
-            String time = "Time: " + String.format("%02d.%03d s", seconds, mseconds);
-            System.out.println(time);
-            
+
             System.out.println(result);
-            
-            lblResult.setText(result);
+
+            lblClass.setText("Class: " + result);
 
             //Now do search with Lucene and show results
         } catch (Exception ex) {
@@ -94,7 +99,7 @@ public class MainController extends SplitPane {
             alert.setHeaderText("Please make sure that models are properly loaded.");
             alert.setContentText("You can load weka models using File -> Load Naive Bayes model or File -> Load SVM model\n"
                     + "Then make sure that correct algorithm is used for classification.");
-            
+
             alert.showAndWait();
         } finally {
             return result;
@@ -105,12 +110,37 @@ public class MainController extends SplitPane {
     //region UI handler methods
     @FXML
     protected void search() {
+        //Reset previous results
+        resetResult();
+
+        //Get text
         String searchText = searchTextBox.getText();
+
+        long startTime = System.currentTimeMillis();
+
+        //Classify with naive bayes
         String classified = classify(searchText);
-        
-        textSearch.Search(classified, searchText);
-        
-        System.out.println(searchText);
+        //Search with lucene
+        SearchResults result = textSearch.Search(classified, searchText);
+
+        long endTime = System.currentTimeMillis();
+        long totalTime = endTime - startTime;
+        long seconds = TimeUnit.MILLISECONDS.toSeconds(totalTime);
+        long mseconds = totalTime - TimeUnit.SECONDS.toMillis(seconds);
+        String time = "Time: " + String.format("%02d.%03d s", seconds, mseconds);
+        //Set time needed for classification and search
+        lblTime.setText(time);
+
+        //Show in list results
+        lblResult.setText("Results: " + result.TotalHits);
+
+        for (SearchResult searchResult : result.SearchResults) {
+            System.out.println("Title: " + searchResult.Title);
+            resultsListData.add(searchResult.Title);
+        }
+
+        //Set list data
+        lstResults.setItems(resultsListData);
     }
 
     //endregion
