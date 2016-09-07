@@ -111,6 +111,23 @@ public class MainController extends SplitPane {
         }
     }
 
+    private void SearchOverAllDocuments(String text) {
+        long startTime = System.currentTimeMillis();
+
+        //Classify with naive bayes
+        String classified = classify(text);
+        //Search with lucene
+        result = textSearch.Search("", text);
+
+        long endTime = System.currentTimeMillis();
+        long totalTime = endTime - startTime;
+        long seconds = TimeUnit.MILLISECONDS.toSeconds(totalTime);
+        long mseconds = totalTime - TimeUnit.SECONDS.toMillis(seconds);
+        String time = "Time: " + String.format("%02d.%03d s", seconds, mseconds);
+        //Set time needed for classification and search
+        lblTime.setText(time);
+    }
+
     //endregion
     //region UI handler methods
     @FXML
@@ -120,7 +137,11 @@ public class MainController extends SplitPane {
 
         //Get text
         String searchText = searchTextBox.getText();
+        
+        //Search over all documents
+        SearchOverAllDocuments(searchText);
 
+        //Search over all documents and all indexes
         long startTime = System.currentTimeMillis();
 
         //Classify with naive bayes

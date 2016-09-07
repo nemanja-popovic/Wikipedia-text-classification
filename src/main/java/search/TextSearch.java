@@ -11,6 +11,7 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.logging.FileHandler;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.apache.lucene.analysis.Analyzer;
@@ -48,6 +49,8 @@ public class TextSearch {
     private IndexReader indexReaderPhilosophy;
     private IndexReader indexReaderPhysics;
 
+    Logger logger = Logger.getLogger("WekaTextClassifier");
+
     //D:\Faks\Suzana\WekaTextClassification\WekaTextClassification\resources\indexes
     private String BASE_INDEX_PATH = "resources/indexes/";
     //private String BASE_INDEX_PATH = "D:\\Faks\\Suzana\\WekaTextClassification\\WekaTextClassification\\resources\\indexes\\";
@@ -59,8 +62,9 @@ public class TextSearch {
     private final int hitsPerPage = 10000;
 
     public TextSearch() {
-
         try {
+            logger.addHandler(new FileHandler("D:/WekaTextCLassification.log"));
+
             _indexSearchers = new HashMap<String, IndexSearcher>();
             analyzer = new WhitespaceAnalyzer();
 
@@ -101,8 +105,9 @@ public class TextSearch {
                     indexReaderLiterature, indexReaderMathematics, indexReaderMusic,
                     indexReaderPhilosophy, indexReaderPhysics)));
 
+            logger.log(Level.FINE, "Lucene Index loaded ok.");
         } catch (IOException ex) {
-            Logger.getLogger(TextSearch.class.getName()).log(Level.SEVERE, null, ex);
+            logger.log(Level.SEVERE, null, ex);
         }
     }
 
@@ -136,11 +141,12 @@ public class TextSearch {
 
             result.TotalHits = docs.totalHits;
             result.SearchResults = searchItems;
-
+            
+            logger.log(Level.FINE, "Search done on text: " + text);
         } catch (ParseException ex) {
-            Logger.getLogger(TextSearch.class.getName()).log(Level.SEVERE, null, ex);
+            logger.log(Level.SEVERE, null, ex);
         } catch (IOException ex) {
-            Logger.getLogger(TextSearch.class.getName()).log(Level.SEVERE, null, ex);
+            logger.log(Level.SEVERE, null, ex);
         } finally {
             return result;
         }

@@ -19,8 +19,9 @@ public class Main extends Application {
 
     private Stage primaryStage;
     private BorderPane rootLayout;
-
+    
     private Classificator naiveBayesClassificator;
+    //private final String NAIVE_BAYES_MODEL_PATH = "resources/weka-models/filtered-naive-bayes-multi.model";
     private final String NAIVE_BAYES_MODEL_PATH = "resources/weka-models/filtered-naive-bayes-multi.model";
     private final String ICON_IMAGE_PATH = "file:resources/images/icon.png";
 
