@@ -6,6 +6,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import javafx.scene.input.MouseEvent;
 import search.SearchResult;
 import search.SearchResults;
 import search.TextSearch;
@@ -22,6 +23,7 @@ public class MainController extends SplitPane {
 
     private TextSearch textSearch;
 
+    SearchResults result;
     ObservableList<String> resultsListData;
 
     //endregion
@@ -40,6 +42,8 @@ public class MainController extends SplitPane {
     private Label lblTime;
     @FXML
     private ListView lstResults;
+    @FXML
+    private TextArea txtDocumentDetails;
 
     //endregion
     //region Constructors
@@ -77,6 +81,7 @@ public class MainController extends SplitPane {
         lblResult.setText("Results: ");
         lblTime.setText("Time: ");
         resultsListData.clear();
+        txtDocumentDetails.clear();
     }
 
     private String classify(String text) {
@@ -121,7 +126,7 @@ public class MainController extends SplitPane {
         //Classify with naive bayes
         String classified = classify(searchText);
         //Search with lucene
-        SearchResults result = textSearch.Search(classified, searchText);
+        result = textSearch.Search(classified, searchText);
 
         long endTime = System.currentTimeMillis();
         long totalTime = endTime - startTime;
@@ -141,6 +146,17 @@ public class MainController extends SplitPane {
 
         //Set list data
         lstResults.setItems(resultsListData);
+    }
+
+    @FXML
+    public void listMouseClick(MouseEvent arg0) {
+        int index = lstResults.getSelectionModel().getSelectedIndex();
+        if (result != null && result.SearchResults != null && !result.SearchResults.isEmpty()) {
+            SearchResult selectedDocument = result.SearchResults.get(index);
+            txtDocumentDetails.setText(selectedDocument.Content);
+            System.out.println(index);
+            System.out.println("clicked on " + lstResults.getSelectionModel().getSelectedItem());
+        }
     }
 
     //endregion
